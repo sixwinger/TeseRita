@@ -45,10 +45,10 @@ def func_calculo_distancia(lat1,long1,lat2,long2): #Calculo de distancias basead
 
 if __name__ == "__main__":
 
-    caminhoFicheiro ='coordenadasInes2.xlsm'                                #Caminho para o ficheiro com as coordenadas
-    coord = pd.read_excel (caminhoFicheiro)                                 #Abre ficheiro e carrega como dataframe
-    distancias = func_matriz_distancias(coord)                              #Cálculo de distancias
-    distancias.to_excel("distancias.xlsx",index=False, header = False)      #Guarda no excel
+    caminhoFicheiro ='Dados/Dados.xlsm'                                         #Caminho para o ficheiro com as coordenadas
+    coord = pd.read_excel (caminhoFicheiro)                                     #Abre ficheiro e carrega como dataframe
+    distancias = func_matriz_distancias(coord)                                  #Cálculo de distancias
+    distancias.to_excel("Dados/Distancias.xlsx",index=False, header = False)    #Guarda no excel
 
 
 
