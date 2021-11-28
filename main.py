@@ -6,10 +6,22 @@ mDistancias, mVolumesDados = funcDadosExcel('Dados/Distancias.xlsx' ,'Dados/Volu
 dictConstrangimentos = funcConstrangimentos()
 dictVariavelAlgoritmo = funcVarAlogritmo()
 popInicial = funcInitPop(dictVariavelAlgoritmo['tamanho_Pop'])
-carrinha = funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados)
+mResultados = []
 
-print(carrinha)
+for cromossoma in popInicial:
+
+    print('A validar cromossoma: ' + cromossoma)
+    mCromossoma = popInicial[cromossoma].values.tolist()
+
+    mResultados.append(funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias))
+
+with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
+
+    for nCromossoma, mResultado in enumerate(mResultados):
+
+        nomeFolha = 'Cromossoma' + str(nCromossoma)
+        mResultado.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
 
 if __name__ == "__main__":
 
-    print('Main fuction')   
+    print('-- Fim --')   

@@ -1,43 +1,103 @@
 import pandas as pd
 
-def funcConstrucaoCarrinhas(pop,dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados):
-
-    carrinha = 0
-    cromossoma = pop['Cromossoma 0']
-    distCarrinha = funcIniciaCarrinha()
+def funcConstrucaoCarrinhas(pop,dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados,mCromossoma, mDistancias):
+    i=0
+    dictCarrinha = funcIniciaCarrinha(0, dictConstrangimentos)
     mResultado = pd.DataFrame()
-    lista = []
 
-    for i in range(len(pop)-1):                                        #Ciclo que vai criar os cromossoma
+    while(len(mCromossoma)!=0):                                        #Ciclo que vai criar os mCromossoma
+    
+        bTestePesoVolumes = funcTestePesoVolumes(dictConstrangimentos,dictCarrinha,mVolumesDados, mCromossoma,i)
+        bTesteHorasSlot, tempoViagem = funcTesteHorasSlot(dictConstrangimentos, dictCarrinha, mVolumesDados, mCromossoma, mDistancias, i)
 
-        mCarrinha =pd.DataFrame()
-
-        if dictConstrangimentos['Volume_Max'] >= distCarrinha['VolumeAtual']+int(mVolumesDados.loc[[cromossoma[0]]]['Volumes'])*dictConstrangimentos['Vcx']:
+        if bTestePesoVolumes == True and bTesteHorasSlot == True:
          
-            distCarrinha['VolumeAtual'] = distCarrinha['VolumeAtual']+int(mVolumesDados.loc[[cromossoma[i]]]['Volumes']) 
-            print(carrinha)
-            print(distCarrinha['VolumeAtual'])
-            lista.append(cromossoma[i])
+            dictCarrinha['VolumeAtual'] = dictCarrinha['VolumeAtual']+int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['Vcx'] 
+            
+            if dictCarrinha['horaAtual'] > mVolumesDados['Início Slot'][i]:
+            
+                dictCarrinha['horaAtual'] = dictCarrinha['horaAtual'] + tempoViagem + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+
+            else:
+
+                dictCarrinha['horaAtual'] = mVolumesDados['Início Slot'][i] + tempoViagem + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+
+            
+
+            dictCarrinha['lista'].append(mCromossoma[i])
+            del mCromossoma[i]
+
         else:
 
-            carrinha += 1
-            distCarrinha = funcIniciaCarrinha()
-            nome = 'Carrinha' + str(carrinha)
-            mCarrinha[nome]=lista
-            mResultado = pd.concat([mResultado, mCarrinha], axis=1)
+            i+=1
 
-    mResultado.to_excel("Dados/Cromossoma_debug.xlsx",index = True, header = True) 
+        if len(mCromossoma)<=i:
 
-    return carrinha
+            i = 0
+            #print(dictCarrinha['VolumeAtual'])
+            #print(dictCarrinha['horaAtual'])
+            mResultado = funcEscreveCarrinha(mResultado, dictCarrinha)
+            dictCarrinha = funcIniciaCarrinha(dictCarrinha['Carrinha'], dictConstrangimentos)
 
-def funcIniciaCarrinha ():
+    return mResultado 
+
+def funcTestePesoVolumes(dictConstrangimentos, dictCarrinha,mVolumesDados,mCromossoma,i):
+
+    if (dictConstrangimentos['Volume_Max'] >= dictCarrinha['VolumeAtual']+int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['Vcx']):
+        
+        bTestePesoVolumes = True
+
+    else:
+
+        bTestePesoVolumes = False
+ 
+    return bTestePesoVolumes
+
+def funcTesteHorasSlot(dictConstrangimentos, dictCarrinha,mVolumesDados,mCromossoma,mDistancias,i):
+
+    if i == 0:
+        
+        tempo = mDistancias.loc[0][mCromossoma[i]+2]/dictConstrangimentos['vel_Carrinha']
+
+    else:
+        
+        tempo = mDistancias.loc[mCromossoma[i-1]+1][mCromossoma[i]+2]/dictConstrangimentos['vel_Carrinha']
+
+    if dictCarrinha['VolumeAtual']==0:
+
+        bTesteHorasSlot = True
+
+    elif ((mVolumesDados['Início Slot'][mCromossoma[i]] < dictCarrinha['horaAtual']+tempo) and (mVolumesDados['Fim Slot'][mCromossoma[i]] > dictCarrinha['horaAtual']+tempo)):
+        
+        bTesteHorasSlot = True
+
+    else:
+
+        bTesteHorasSlot = False
+ 
+    return bTesteHorasSlot, tempo
+
+def funcIniciaCarrinha (carrinha, dictConstrangimentos):
 
     dictCarrinha =  {
 
-        'VolumeAtual' : 0
-        
+        'Carrinha'      : carrinha + 1,
+        'VolumeAtual'   : 0,
+        'lista'         : [],
+        'horaAtual' : dictConstrangimentos['hora_Arranque'] 
     }
     return dictCarrinha
+
+def funcEscreveCarrinha (mResultado, dictCarrinha):
+
+    nome = 'Carrinha ' + str(dictCarrinha['Carrinha'])
+    mCarrinha =pd.DataFrame([dictCarrinha['VolumeAtual'],dictCarrinha['horaAtual']],columns=[nome], index =['Volume','Hora Final'])
+    lista_df = pd.DataFrame()
+    lista_df[nome] = dictCarrinha['lista']
+    mCarrinha = mCarrinha.append(lista_df)
+    mResultado = pd.concat([mResultado, mCarrinha], axis=1)
+
+    return mResultado
 
 if __name__ == "__main__":
 

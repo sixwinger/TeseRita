@@ -1,5 +1,6 @@
 import pandas as pd
 import math as Math
+print('A juntar informação Inicial')
 
 def funcVarAlogritmo():
 
@@ -15,10 +16,9 @@ def funcConstrangimentos():
     dictConstrangimentos={
         'Vcx' : 0.5,                    #Volumetria da caixa em m3
         'Volume_Max': 50,               #Volume maximo                
-        'vel_Carrinha' : 50,            #Velocidade em km/h da carrinha
+        'vel_Carrinha' : 1 ,            #Velocidade em km/m da carrinha
         'tempo_entrega_volume' : 2,     #Tempo de entrega por volume
         'hora_Arranque' : 615,          #Hora de arranque
-        'hora_Final': 840
     }
 
     return dictConstrangimentos
