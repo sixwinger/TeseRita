@@ -5,24 +5,24 @@ def funcConstrucaoCarrinhas(pop,dictConstrangimentos, dictVariavelAlgoritmo, mVo
     dictCarrinha = funcIniciaCarrinha(0, dictConstrangimentos)
     mResultado = pd.DataFrame()
 
-    while(len(mCromossoma)!=0):                                        #Ciclo que vai criar os mCromossoma
+    while(len(mCromossoma)!=0):                                       
     
         bTestePesoVolumes = funcTestePesoVolumes(dictConstrangimentos,dictCarrinha,mVolumesDados, mCromossoma,i)
-        bTesteHorasSlot, tempoViagem = funcTesteHorasSlot(dictConstrangimentos, dictCarrinha, mVolumesDados, mCromossoma, mDistancias, i)
+        bTesteHorasSlot, km = funcTesteHorasSlot(dictConstrangimentos, dictCarrinha, mVolumesDados, mCromossoma, mDistancias, i)
 
         if bTestePesoVolumes == True and bTesteHorasSlot == True:
          
             dictCarrinha['VolumeAtual'] = dictCarrinha['VolumeAtual']+int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['Vcx'] 
             
-            if dictCarrinha['horaAtual'] > mVolumesDados['Início Slot'][i]:
+            if dictCarrinha['horaAtual'] > mVolumesDados['Início Slot'][i]: #se a hora atual for superior à hora da slot
             
-                dictCarrinha['horaAtual'] = dictCarrinha['horaAtual'] + tempoViagem + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+                dictCarrinha['horaAtual'] = dictCarrinha['horaAtual'] + km/dictConstrangimentos['vel_Carrinha'] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
 
-            else:
+            else: #se a hora atual for inferior à hora da slot
 
-                dictCarrinha['horaAtual'] = mVolumesDados['Início Slot'][i] + tempoViagem + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+                dictCarrinha['horaAtual'] = mVolumesDados['Início Slot'][i] + km/dictConstrangimentos['vel_Carrinha'] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
 
-            
+            dictCarrinha['km'] = dictCarrinha['km'] + km
 
             dictCarrinha['lista'].append(mCromossoma[i])
             del mCromossoma[i]
@@ -57,11 +57,13 @@ def funcTesteHorasSlot(dictConstrangimentos, dictCarrinha,mVolumesDados,mCromoss
 
     if i == 0:
         
-        tempo = mDistancias.loc[0][mCromossoma[i]+2]/dictConstrangimentos['vel_Carrinha']
+        km = mDistancias.loc[0][mCromossoma[i]+2]
+        tempo = dictConstrangimentos['vel_Carrinha']
 
     else:
         
-        tempo = mDistancias.loc[mCromossoma[i-1]+1][mCromossoma[i]+2]/dictConstrangimentos['vel_Carrinha']
+        km = mDistancias.loc[mCromossoma[i-1]+1][mCromossoma[i]+2]
+        tempo = dictConstrangimentos['vel_Carrinha']
 
     if dictCarrinha['VolumeAtual']==0:
 
@@ -75,7 +77,7 @@ def funcTesteHorasSlot(dictConstrangimentos, dictCarrinha,mVolumesDados,mCromoss
 
         bTesteHorasSlot = False
  
-    return bTesteHorasSlot, tempo
+    return bTesteHorasSlot, km
 
 def funcIniciaCarrinha (carrinha, dictConstrangimentos):
 
@@ -84,14 +86,15 @@ def funcIniciaCarrinha (carrinha, dictConstrangimentos):
         'Carrinha'      : carrinha + 1,
         'VolumeAtual'   : 0,
         'lista'         : [],
-        'horaAtual' : dictConstrangimentos['hora_Arranque'] 
+        'horaAtual'     : dictConstrangimentos['hora_Arranque'],
+        'km'            : 0 
     }
     return dictCarrinha
 
 def funcEscreveCarrinha (mResultado, dictCarrinha):
 
     nome = 'Carrinha ' + str(dictCarrinha['Carrinha'])
-    mCarrinha =pd.DataFrame([dictCarrinha['VolumeAtual'],dictCarrinha['horaAtual']],columns=[nome], index =['Volume','Hora Final'])
+    mCarrinha =pd.DataFrame([dictCarrinha['VolumeAtual'],dictCarrinha['horaAtual'],dictCarrinha['km']],columns=[nome], index =['Volume','Hora Final','km'])
     lista_df = pd.DataFrame()
     lista_df[nome] = dictCarrinha['lista']
     mCarrinha = mCarrinha.append(lista_df)
