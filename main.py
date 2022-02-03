@@ -8,12 +8,22 @@ dictVariavelAlgoritmo = funcVarAlogritmo()
 popInicial = funcInitPop(dictVariavelAlgoritmo['tamanho_Pop'])
 mResultados = []
 
+
 for cromossoma in popInicial:
 
     print('A validar cromossoma: ' + cromossoma)
     mCromossoma = popInicial[cromossoma].values.tolist()
+    prob_mutacao = random.uniform(0, 1)
+
+    if prob_mutacao <= dictVariavelAlgoritmo['taxa_Mutacao']:
+
+        print('iria mutar')
+
 
     mResultados.append(funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias))
+
+
+
 
 with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
 

@@ -11,6 +11,7 @@ def funcInitPop(volumes):                                           #Inicia nova
 
         nome = 'Cromossoma '+ str(i)                                 #Atribui o nome do cromossoma
         lista = random.sample(range(0, volumes-1), volumes-1)       #Gera uma matriz aliatoriamente de 2 até tamanho de população 1 
+        lista = [x+1 for x in lista]
         pop[nome] = lista                                           #Adiciona o cromossoma há população
     
     pop.to_excel("Dados/Debug/Data_debug.xlsx",index = True, header = True) 

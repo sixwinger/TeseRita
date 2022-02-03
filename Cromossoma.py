@@ -18,19 +18,22 @@ def funcConstrucaoCarrinhas(pop,dictConstrangimentos, dictVariavelAlgoritmo, mVo
          
             dictCarrinha['VolumeAtual'] = dictCarrinha['VolumeAtual']+int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['Vcx'] 
 
+            dictCarrinha['horaAtual'] = dictCarrinha['horaAtual']+km/dictConstrangimentos['vel_Carrinha']
+
             #se a hora atual for superior à hora da slot
-            if dictCarrinha['horaAtual'] > mVolumesDados['Início Slot'][i]: 
+            if dictCarrinha['horaAtual'] > mVolumesDados['Início Slot'][mCromossoma[i]] : 
             
-                dictCarrinha['horaAtual'] = dictCarrinha['horaAtual'] + km/dictConstrangimentos['vel_Carrinha'] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+                dictCarrinha['horaAtual'] = dictCarrinha['horaAtual'] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
            
             #se a hora atual for inferior à hora da slot
             else: 
 
-                dictCarrinha['horaAtual'] = mVolumesDados['Início Slot'][i] + km/dictConstrangimentos['vel_Carrinha'] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
+                dictCarrinha['horaAtual'] = mVolumesDados['Início Slot'][mCromossoma[i]] + int(mVolumesDados.loc[[mCromossoma[i]]]['Volumes'])*dictConstrangimentos['tempo_entrega_volume'] 
 
             dictCarrinha['km'] = dictCarrinha['km'] + km    #soma km
             dictCarrinha['lista'].append(mCromossoma[i])    #coloca encomenda
             del mCromossoma[i]                              #retira encomenda do cromossoma
+            i+=1
 
         #Passa para a encomenda seguite se o volume ou hora não são compativeis
         else:
@@ -75,7 +78,7 @@ def funcTesteHorasSlot(dictConstrangimentos, dictCarrinha,mVolumesDados,mCromoss
     #se não for a primeira viagem então verifica o ultimo ponto
     else: 
         
-        km = mDistancias.loc[mCromossoma[i-1]+1][mCromossoma[i]+2]
+        km = mDistancias.loc[mCromossoma[i]+1][dictCarrinha['lista'][len(dictCarrinha['lista'])-1]+2]
         tempo = dictConstrangimentos['vel_Carrinha']*km
 
 
