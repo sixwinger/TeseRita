@@ -41,7 +41,7 @@ def funcOrdenaFitnessGeral(fitnessGeral, num):
             fitnessGeral.iat[i,7] = fitnessGeral.iat[i,6]  
 
         else:
-            print(fitnessGeral.iat[i-1,7] + fitnessGeral.iat[i,6])
+            
             fitnessGeral.iat[i,7] = fitnessGeral.iat[i-1,7] + fitnessGeral.iat[i,6]
 
     return fitnessGeral

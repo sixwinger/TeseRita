@@ -16,7 +16,6 @@ for cromossoma in popInicial:
 
     print('A validar cromossoma: ' + cromossoma)
     mCromossoma = popInicial[cromossoma].values.tolist()
-    prob_mutacao = random.uniform(0, 1)
 
     mResultado = funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias)
     mFitness = mFitness.append(pd.DataFrame([[str(cromossoma), mResultado.loc['km'].sum(),mResultado.loc['km'].count()]], columns = ['Cromossoma','km','Carrinhas']),ignore_index=True)
