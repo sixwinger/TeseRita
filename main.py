@@ -1,12 +1,15 @@
 from Input import *
 from Initpop import *
 from Cromossoma import *
+from Fitness import *
+import pandas as pd
 
 mDistancias, mVolumesDados = funcDadosExcel('Dados/Distancias.xlsx' ,'Dados/Volumes.xlsm') 
 dictConstrangimentos = funcConstrangimentos()
 dictVariavelAlgoritmo = funcVarAlogritmo()
 popInicial = funcInitPop(dictVariavelAlgoritmo['tamanho_Pop'])
 mResultados = []
+mFitness = pd.DataFrame()
 
 
 for cromossoma in popInicial:
@@ -15,17 +18,20 @@ for cromossoma in popInicial:
     mCromossoma = popInicial[cromossoma].values.tolist()
     prob_mutacao = random.uniform(0, 1)
 
-    if prob_mutacao <= dictVariavelAlgoritmo['taxa_Mutacao']:
+    mResultado = funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias)
+    mFitness = mFitness.append(pd.DataFrame([[str(cromossoma), mResultado.loc['km'].sum(),mResultado.loc['km'].count()]], columns = ['Cromossoma','km','Carrinhas']),ignore_index=True)
 
-        print('iria mutar')
+    mResultados.append(mResultado)
 
-
-    mResultados.append(funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias))
-
-
-
+mFitnessGeral = funcCalculoFitness(mFitness)
 
 with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
+
+    nomeFolha = 'Fitness'
+    mFitness.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
+
+    nomeFolha = 'Fitness Resultado'
+    mFitnessGeral.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
 
     for nCromossoma, mResultado in enumerate(mResultados):
 

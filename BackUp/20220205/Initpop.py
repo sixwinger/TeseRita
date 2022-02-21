@@ -4,12 +4,12 @@ from Input import *
 print('A iniciar população Inicial')
 def funcInitPop(volumes):                                           #Inicia nova população
 
-    data = range(1,volumes)                                         #Cria o range do tamanho do numero de entregas + partida + chegada
+    data = range(1,volumes)                                       #Cria o range do tamanho do numero de entregas + partida + chegada
     pop = pd.DataFrame()                                            #Inicia data frame do pandas
 
     for i in range(volumes):                                        #Ciclo que vai criar os cromossoma
 
-        nome = 'Cromossoma '+ str(i)                                #Atribui o nome do cromossoma
+        nome = 'Cromossoma '+ str(i)                                 #Atribui o nome do cromossoma
         lista = random.sample(range(0, volumes-1), volumes-1)       #Gera uma matriz aliatoriamente de 2 até tamanho de população 1 
         lista = [x+1 for x in lista]
         pop[nome] = lista                                           #Adiciona o cromossoma há população
