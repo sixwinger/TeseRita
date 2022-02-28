@@ -2,6 +2,7 @@ from Input import *
 from Initpop import *
 from Cromossoma import *
 from Fitness import *
+from Roleta import *
 import pandas as pd
 
 mDistancias, mVolumesDados = funcDadosExcel('Dados/Distancias.xlsx' ,'Dados/Volumes.xlsm') 
@@ -18,11 +19,11 @@ for cromossoma in popInicial:
     mCromossoma = popInicial[cromossoma].values.tolist()
 
     mResultado = funcConstrucaoCarrinhas(popInicial, dictConstrangimentos, dictVariavelAlgoritmo, mVolumesDados, mCromossoma, mDistancias)
-    mFitness = mFitness.append(pd.DataFrame([[str(cromossoma), mResultado.loc['km'].sum(),mResultado.loc['km'].count()]], columns = ['Cromossoma','km','Carrinhas']),ignore_index=True)
-
+    mFitness = pd.concat([mFitness,(pd.DataFrame([[str(cromossoma), mResultado.loc['km'].sum(),mResultado.loc['km'].count()]], columns = ['Cromossoma','km','Carrinhas']))])
     mResultados.append(mResultado)
 
-mFitnessGeral = funcCalculoFitness(mFitness)
+mFitnessGeral = funcFitnessAdaptada(mFitness)
+mRoleta = funcRoleta(mFitnessGeral)
 
 with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
 
@@ -36,6 +37,11 @@ with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
 
         nomeFolha = 'Cromossoma' + str(nCromossoma)
         mResultado.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
+
+with pd.ExcelWriter('Dados/Debug/Roleta_Debug.xlsx') as writer:
+
+    nomeFolha = 'Roleta Resultado'
+    mRoleta.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
 
 if __name__ == "__main__":
 
