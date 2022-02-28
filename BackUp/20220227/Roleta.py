@@ -14,8 +14,6 @@ def funcRoleta (fitnessGeral):
 
 def funcOrdenaRoleta(fitnessGeral, num):
 
-    print('A calcular Roleta')
-
     resultadoRoleta = fitnessGeral.sort_values(by='%', ascending=False)
     resultadoRoleta['% Acumulada'] = list(np.arange(1,num+1))
 
