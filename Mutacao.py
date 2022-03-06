@@ -4,23 +4,18 @@ from random import randrange
 
 def funcMutancao(cromossoma):
 
-   print(cromossoma)
    i = randrange(len(cromossoma)-1)
    j = randrange(i+1,len(cromossoma))
    novoCromossoma = cromossoma.copy()
-   print(str(i) + ":" + str(j))
 
    while i<j:
 
-      print(cromossoma[i])
-      print(cromossoma[j])
       novoCromossoma[i] = cromossoma[j] 
       novoCromossoma[j] = cromossoma[i] 
 
       i+=1      
       j-=1
 
-   print(novoCromossoma)
    return novoCromossoma
 
 if __name__ == "__main__":

@@ -23,6 +23,8 @@ import numpy as np
 #Função 
 def funcFitnessAdaptada(fitnessGeral):
 
+    print('A calcular Fitness')
+
 #km
     num = len(fitnessGeral)
     fitnessGeral['Pontuação KM'] = list(np.arange(1,num+1))

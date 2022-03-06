@@ -3,6 +3,7 @@ from Initpop import *
 from Cromossoma import *
 from Fitness import *
 from Roleta import *
+from Casamento import *
 import pandas as pd
 
 mDistancias, mVolumesDados = funcDadosExcel('Dados/Distancias.xlsx' ,'Dados/Volumes.xlsm') 
@@ -25,6 +26,9 @@ for cromossoma in popInicial:
 mFitnessGeral = funcFitnessAdaptada(mFitness.copy())
 mRoleta = funcRoleta(mFitnessGeral)
 
+mNewpop = funcCasamento(mFitnessGeral, popInicial.copy() , dictVariavelAlgoritmo)
+
+
 with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
 
     nomeFolha = 'Fitness'
@@ -42,6 +46,11 @@ with pd.ExcelWriter('Dados/Debug/Roleta_Debug.xlsx') as writer:
 
     nomeFolha = 'Roleta Resultado'
     mRoleta.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
+
+with pd.ExcelWriter('Dados/Debug/Cruzamento_debug.xlsx') as writer:
+
+    nomeFolha = 'Cruzamento Resultado'
+    mNewpop.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
 
 if __name__ == "__main__":
 

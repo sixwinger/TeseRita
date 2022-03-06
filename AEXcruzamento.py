@@ -30,7 +30,7 @@ def funcAexcruzamento(pais):
 
                while pais[flag][j] in filho:
 
-                   j = randrange(tamanhoFilhos-1)
+                   j = randrange(0,tamanhoFilhos)
 
                filho[i] = pais[flag][j]
                
@@ -42,13 +42,14 @@ def funcAexcruzamento(pais):
                     j=0
                 while pais[flag][j] in filho:
 
-                   j = randrange(tamanhoFilhos-1)
+                   j = randrange(0,tamanhoFilhos)
               
                 filho[i] = pais[flag][j]
             
             index += 1
             i += 1
-            print(filho)
+
+    
     return filho
 
 
