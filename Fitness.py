@@ -70,11 +70,29 @@ def funcFitnessAdaptada(fitnessGeral):
             peso = 0
     fitnessGeral['Resultado Fitness'] = fitnessGeral['Pontuação KM'] + fitnessGeral['Pontuação NCarrinhas']
     fitnessGeral = fitnessGeral.sort_values(by='Resultado Fitness', ascending=False)
-
+ 
+    factor = (num*(1+num))
+    fitnessGeral['%'] = fitnessGeral['Resultado Fitness'] / factor
+    fitnessGeral = funcOrdenaFitnessGeral(fitnessGeral, num)
 
     return fitnessGeral
 
+def funcOrdenaFitnessGeral(fitnessGeral, num):
 
+    fitnessGeral = fitnessGeral.sort_values(by='%', ascending=False)
+    fitnessGeral['% Acumulada'] = list(np.arange(1,num+1))
+
+    for i in range(num):
+
+        if i == 0:
+
+            fitnessGeral.iat[i,7] = fitnessGeral.iat[i,6]  
+
+        else:
+            
+            fitnessGeral.iat[i,7] = fitnessGeral.iat[i-1,7] + fitnessGeral.iat[i,6]
+    
+    return fitnessGeral
 if __name__ == "__main__":
 
     mFitness = pd.read_excel ('Dados/Debug/Cromossoma_debug.xlsx', sheet_name='Fitness', index_col=0)

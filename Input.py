@@ -7,7 +7,7 @@ def funcVarAlogritmo():
     dictVariavelAlgoritmo={
 
         'tamanho_Pop': 84,              #Tamanho da população
-        'taxa_Mutacao': 0.025           #Taxa de mutação
+        'taxa_Mutacao': 0.500           #Taxa de mutação
     }
 
     return dictVariavelAlgoritmo
