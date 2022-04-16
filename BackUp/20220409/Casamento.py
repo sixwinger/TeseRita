@@ -8,11 +8,12 @@ def funcCasamento (mFitnessGeral, mPop, dictVariavelAlgoritmo):
     print('A calcular Casamento')
 
     mPopNova = pd.DataFrame()
-    for i in range(len(mPop)+1):
+    for i in range(len(mPop)):
 
         pais = [funcSelecaoPais(mFitnessGeral),funcSelecaoPais(mFitnessGeral)]
         filho = funCruzamento(pais, mPop.copy(), dictVariavelAlgoritmo)
-        nome = 'Cromossoma ' + str(i)
+        print('Cruzamento Cromossoma: ' + str(i))
+        nome = 'Cromossoa ' + str(i)
         mPopNova = pd.concat([mPopNova.copy(), (pd.DataFrame(filho, columns= [nome]))], axis=1)
 
     return mPopNova

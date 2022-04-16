@@ -6,10 +6,7 @@ from Cromossoma import *
 from Fitness import *
 from Roleta import *
 from Casamento import *
-from Resumo import *
-
 import pandas as pd
-
 
 mDistancias, mVolumesDados = funcDadosExcel('Dados/Distancias.xlsx' ,'Dados/Volumes.xlsm') 
 dictConstrangimentos = funcConstrangimentos()
@@ -17,9 +14,6 @@ dictVariavelAlgoritmo = funcVarAlogritmo()
 popInicial = funcInitPop(dictVariavelAlgoritmo['tamanho_Pop'])
 mResultados = []
 mFitness = pd.DataFrame()
-dCromossoma = pd.DataFrame()
-dCarrinhas = []
-
 itry = 1
 ftry = 3
 
@@ -42,11 +36,8 @@ while itry != ftry:
 
     popInicial = mNewpop.copy()
     mFitness = pd.DataFrame()
+    mResultados = []
     itry += 1
-    dCromossoma, dCarrinhas = funcResumo(mResultados,mRoleta,dCromossoma.copy(), dCarrinhas)
-
-    if itry != ftry:
-        mResultados = []
 
 with pd.ExcelWriter('Dados/Debug/Cromossoma_debug.xlsx') as writer:
 
@@ -70,17 +61,6 @@ with pd.ExcelWriter('Dados/Debug/Cruzamento_debug.xlsx') as writer:
 
     nomeFolha = 'Cruzamento Resultado'
     mNewpop.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
-
-with pd.ExcelWriter('Dados/Debug/Resumo.xlsx') as writer:
-
-    nomeFolha = 'Resumo'
-    dCromossoma.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
-
-    for nGerecao, dCarrinhas in enumerate(dCarrinhas):
-
-        nomeFolha = 'Geração ' + str(nGerecao)
-        dCarrinhas.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
-
 
 if __name__ == "__main__":
 

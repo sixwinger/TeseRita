@@ -6,6 +6,7 @@ def funcMutancao(cromossoma):
 
    i = randrange(len(cromossoma)-1)
    j = randrange(i+1,len(cromossoma))
+   print(str(i)+':'+str(j))
    novoCromossoma = cromossoma.copy()
 
    while i<j:
