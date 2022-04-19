@@ -7,7 +7,7 @@ from Fitness import *
 from Roleta import *
 from Casamento import *
 from Resumo import *
-from Output import *
+
 import pandas as pd
 
 
@@ -21,7 +21,7 @@ dCromossoma = pd.DataFrame()
 dCarrinhas = []
 
 itry = 1
-ftry = 1000
+ftry = 500
 
 while itry != ftry:
 
@@ -71,7 +71,25 @@ with pd.ExcelWriter('Dados/Debug/Cruzamento_debug.xlsx') as writer:
     nomeFolha = 'Cruzamento Resultado'
     mNewpop.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
 
-funcOutput(dCromossoma, dCarrinhas)
+with pd.ExcelWriter('Dados/Debug/Resumo/Resumo.xlsx') as writer:
+
+    nomeFolha = 'Resumo'
+    dCromossoma.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
+
+counter = 0
+nomeFicheiro = 'Dados/Debug/Resumo/Cromossomas 0-50.xlsx'
+
+for nGerecao, dCarrinhas in enumerate(dCarrinhas):
+
+    with pd.ExcelWriter(nomeFicheiro) as writer:
+
+        nomeFolha = 'Geração ' + str(nGerecao)
+        dCarrinhas.to_excel(writer,index = True, header = True, sheet_name = nomeFolha) 
+        counter +=1
+
+    if counter == 2:
+    
+        nomeFicheiro = 'Dados/Debug/Resumo/Cromossomas ' + str(nGerecao) + '-' + str(nGerecao+50) + '.xlsx'
 
 if __name__ == "__main__":
 
