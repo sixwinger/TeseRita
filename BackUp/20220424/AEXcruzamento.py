@@ -1,18 +1,18 @@
+import pandas as pd
 import numpy as np
 from random import randrange
-
 
 def funcAexcruzamento(pais):
 
     tamanhoFilhos = len(pais['pai'])
 
     filho = list(np.zeros(tamanhoFilhos, dtype=int))
-    i = 0
+    i=0
     index = 0
     flag = 'pai'
 
     while i < tamanhoFilhos:
-
+               
         if i == 0:
 
             filho[0] = pais['pai'][0]
@@ -21,48 +21,49 @@ def funcAexcruzamento(pais):
             i = i + 2
 
         else:
-
+            
             if flag == 'pai':
 
-                flag = 'mae'
-                j = pais[flag].index(filho[i-1])+1
-                if j > (tamanhoFilhos - 1):
-                    j = 0
+               flag = 'mae'
+               j = pais[flag].index(filho[i-1])+1
+               if j > (tamanhoFilhos - 1): j=0
 
-                while pais[flag][j] in filho:
+               while pais[flag][j] in filho:
 
-                    j = randrange(0, tamanhoFilhos)
+                   j = randrange(0,tamanhoFilhos)
 
-                filho[i] = pais[flag][j]
-
-            else:
-
+               filho[i] = pais[flag][j]
+               
+            else: 
+            
                 flag = 'pai'
                 j = pais[flag].index(filho[i-1])+1
                 if j > (tamanhoFilhos - 1):
-                    j = 0
+                    j=0
                 while pais[flag][j] in filho:
 
-                    j = randrange(0, tamanhoFilhos)
-
+                   j = randrange(0,tamanhoFilhos)
+              
                 filho[i] = pais[flag][j]
-
+            
             index += 1
-            i += i-1
+            i += 1
 
+    
     return filho
+
 
 
 if __name__ == "__main__":
 
-    pais = {
 
-        'pai': [3, 9, 5, 2, 6, 4, 1, 7, 8],
-        'mae': [7, 8, 1, 9, 4, 3, 5, 6, 2]
+    pais ={
+
+        'pai' : [3, 9, 5, 2, 6, 4, 1, 7, 8],
+        'mae' : [7, 8, 1, 9, 4, 3, 5, 6, 2]
         }
 
     filho = funcAexcruzamento(pais)
 
     print(filho)
-    print('-- Fim AEX --')
-
+    print('-- Fim AEX --')   
