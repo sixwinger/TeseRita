@@ -8,7 +8,8 @@ def funcVarAlogritmo():
 
         'tamanho_Pop': 84,              #Tamanho da população
         'taxa_Mutacao': 1.000,          #Taxa de mutação
-        'tipo_Cruzamento': 'AEX'        #tipo de cruzamento
+        'tipo_Cruzamento': 'AEX',        #tipo de cruzamento
+        'tipo_Selecao': 'Torneio'
     }
 
     return dictVariavelAlgoritmo

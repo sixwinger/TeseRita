@@ -21,7 +21,7 @@ dCromossoma = pd.DataFrame()
 dCarrinhas = []
 
 itry = 1
-ftry = 4
+ftry = 2
 
 while itry != ftry:
 
@@ -38,7 +38,7 @@ while itry != ftry:
     mFitnessGeral = funcFitnessAdaptada(mFitness.copy())
     mRoleta = funcRoleta(mFitnessGeral)
 
-    mNewpop = funcCasamento(mFitnessGeral, popInicial.copy() , dictVariavelAlgoritmo)
+    mNewpop = funcCasamento(mRoleta, popInicial.copy() , dictVariavelAlgoritmo)
 
     popInicial = mNewpop.copy()
     mFitness = pd.DataFrame()

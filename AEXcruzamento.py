@@ -48,7 +48,7 @@ def funcAexcruzamento(pais):
                 filho[i] = pais[flag][j]
 
             index += 1
-            i += i-1
+            i += 1
 
     return filho
 
