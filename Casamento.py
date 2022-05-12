@@ -36,7 +36,7 @@ def funcSelecaoPais(mRoleta, tipo_Selecao):
         concorrente_2 = random.randint(0, len(mRoleta)-1)
         while concorrente_1 == concorrente_2:
 
-            concorrente_2 = random.randint(0, len(mRoleta))
+            concorrente_2 = random.randint(0, len(mRoleta)-1)
 
         if mRoleta.iat[concorrente_1,5] > mRoleta.iat[concorrente_2,5]:
 

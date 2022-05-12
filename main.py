@@ -21,7 +21,7 @@ dCromossoma = pd.DataFrame()
 dCarrinhas = []
 
 itry = 1
-ftry = 2
+ftry = 10
 
 while itry != ftry:
 
